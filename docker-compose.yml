@@ -1,0 +1,26 @@
+version: '2.3'
+
+services:
+    front:
+        image: cookiespoc/front
+        container_name: front
+        tty: true # Needed to ensure container doesn't self terminate
+        build:
+            context: ./front
+            dockerfile: Dockerfile
+        ports: ['5000:5000'] # host:container
+        networks:
+            - quarkus
+    back:
+        image: cookiespoc/back
+        container_name: back
+        tty: true # Needed to ensure container doesn't self terminate
+        build:
+            context: ./back
+            dockerfile: Dockerfile
+        ports: ['4000:4000'] # host:container
+        networks:
+            - quarkus
+networks:
+    quarkus:
+        driver: bridge
