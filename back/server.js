@@ -1,32 +1,14 @@
-const path = require('path')
 const express = require('express');
 const cookieParser = require('cookie-parser')
 const bodyParser = require('body-parser')
 const server = express();
 const fs = require('fs');
 const jwt = require('jsonwebtoken');
+server.use(bodyParser.json())
 server.use(cookieParser())
-server.use(bodyParser.urlencoded({ extended: false }))
 const port = 4000;
 
-// server.get("/", (req, res) => {
-//    res.sendFile(__dirname + '/index.html');
-// });
-
-// server.get("/dashboard.html", (req, res) => {
-// 	res.sendFile(__dirname + '/dashboard.html');
-//  });
-
-// server.get('/funciones.js',function(req,res){
-//     res.sendFile(path.join(__dirname + '/funciones.js')); 
-// });
-
 server.post('/login',function(req, res){
-	// Cookies that have not been signed
-	console.log('Cookies: ', req.cookies)
-	// Cookies that have been signed
-	// console.log('Signed Cookies: ', req.signedCookies)
-console.log('req.body', req.body)
 	if(req.body.user === 'admin@admin.com' && req.body.pass === 'admin') {
 		let privateKey = fs.readFileSync('private.key');
 		let token = jwt.sign({ user: req.body.user, role: 'ADMIN' }, privateKey, { algorithm: 'RS256', expiresIn: 60 * 30 });
@@ -49,7 +31,7 @@ server.get('/userData',function(req,res){
 	let signature = req.cookies.signature
 	let token = payload + '.' + signature
 	let publicKey = fs.readFileSync('public.key');
-
+	
 	try {
 		let decoded = jwt.verify(token, publicKey);
 		if(decoded){
@@ -68,9 +50,7 @@ server.get('/userData',function(req,res){
 	  console.log(err)
 		res.sendStatus(401)
 	}
-	
 });
-
 
 server.listen(port, () => {
     console.log(`Server listening at ${port}`);

@@ -7,7 +7,7 @@ WORKDIR /usr/src/app
 COPY . .
 
 RUN npm install
-RUN npm audit fix
+#RUN npm audit fix
 
 EXPOSE 4000
 

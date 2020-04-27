@@ -8,9 +8,14 @@ services:
         build:
             context: ./front
             dockerfile: Dockerfile
-        ports: ['5000:5000'] # host:container
+        environment:
+            - HOST_BACK=http://back:4000
+        ports: 
+            - '5000:5000' # host:container
+        links:
+            - "back"
         networks:
-            - quarkus
+            - mynetwork
     back:
         image: cookiespoc/back
         container_name: back
@@ -18,9 +23,11 @@ services:
         build:
             context: ./back
             dockerfile: Dockerfile
-        ports: ['4000:4000'] # host:container
+        ports:
+            - '4000:4000' # host:container
         networks:
-            - quarkus
+            - mynetwork
 networks:
-    quarkus:
+    mynetwork:
+        name: mynetwork
         driver: bridge

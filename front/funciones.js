@@ -9,21 +9,41 @@ $(document).ready(function(){
 	});
 
 	const login = function(data) {
-		$.post( "http://localhost:4000/login", data, function(response){
-			console.log(response)
-			location.href = '/dashboard.html'
-		}, 'json').fail(function(error){
-			console.log(error)
-		});
+		// $.post( "/login", data, function(response){
+		// 	console.log(response)
+		// 	location.href = '/dashboard.html'
+		// }, 'json').fail(function(error){
+		// 	console.log(error)
+		// });
+
+		$.ajax({
+			url: '/login',
+			type: 'POST',
+			contentType: 'application/json',
+			data: JSON.stringify(data),
+			success: function(response){
+				console.log(response)
+				location.href = '/dashboard.html'
+			},
+			error: function(error){
+				console.log(error)
+			}
+		})
 	}
 
 	$('#getDataBtn').click(function(){
-		$.get( "http://localhost:4000/userData", function(response){
-			console.log(response)
-			alert('funciona!!!')
-		}).fail(function(error){
-			// console.log(error)
-		});
+		$.ajax({
+			url: '/userData',
+			type: 'GET',
+			contentType: 'application/json',
+			success: function(response){
+				console.log(response)
+				// alert('funciona!!!')
+			},
+			error: function(error){
+				console.log(error)
+			}
+		})
 	})
 
 	$('#mostrar-cookies').click(function(){
